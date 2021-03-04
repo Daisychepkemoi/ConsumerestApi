@@ -8,4 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Users extends Model
 {
     use HasFactory;
+    protected $dates = ['created_at','updated_at'];
+    protected $fillable = [
+        'name', 'email','gender','status','created_at','updated_at'
+    ];
 }

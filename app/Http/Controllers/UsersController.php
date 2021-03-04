@@ -12,10 +12,15 @@ class UsersController extends Controller
     public function getUsers(request $request)
     {
         if ($request->ajax()) {
-            $response = Http::withHeaders([
+            $Firstresponse = Http::withHeaders([
                 'Authorization'    => 'Bearer 5f89042b1e8ca1dd80b8c777493604577fea4a09098162bb84d15e3554f2913d'
             ])->get("https://gorest.co.in/public-api/users");
+            $page = json_decode($Firstresponse)->meta->pagination->pages;
+            $response = Http::withHeaders([
+                'Authorization'    => 'Bearer 5f89042b1e8ca1dd80b8c777493604577fea4a09098162bb84d15e3554f2913d'
+            ])->get("https://gorest.co.in/public-api/users?page={$page}");
             $data = json_decode($response)->data;
+            // dd($data);
             return Datatables::of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function ($data) {
@@ -39,7 +44,7 @@ class UsersController extends Controller
     {
         $response = Http::withHeaders([
             'Authorization'    => 'Bearer 5f89042b1e8ca1dd80b8c777493604577fea4a09098162bb84d15e3554f2913d'
-        ])->get("https://gorest.co.in/public-api/users/{$id}");
+        ])->get("https://gorest.co.in/public-api/users/{$id}")->latest();
         $data = json_decode($response)->data;
         return view('/users/edituser', compact('data'));
     }
@@ -63,10 +68,10 @@ class UsersController extends Controller
             ]
         );
         $quizzes = json_decode($response)->data;
-        if (json_decode($response)->data->code == 201) {
+        if (json_decode($response)->code == 201) {
             return redirect()->route('users.usersindex');
         } else {
-            dd(json_decode($response)->data);
+            dd(json_decode($response));
         }
     }
     public function updateUser(request $request, $id)
@@ -83,10 +88,10 @@ class UsersController extends Controller
                 'updated_at' => now()
             ]
         );
-        if (json_decode($response)->data->code == 200) {
+        if (json_decode($response)->code == 200) {
             return redirect()->route('users.usersindex');
         } else {
-            dd(json_decode($response)->data);
+            dd(json_decode($response));
         }
     }
     public function deleteUser($id)
@@ -95,10 +100,10 @@ class UsersController extends Controller
             'Authorization'    => 'Bearer 5f89042b1e8ca1dd80b8c777493604577fea4a09098162bb84d15e3554f2913d'
         ])->delete("https://gorest.co.in/public-api/users/{$id}");
         $quizzes = json_decode($response);
-        if (json_decode($response)->data->code == 204) {
+        if (json_decode($response)->code == 204) {
             return redirect()->route('users.usersindex');
         } else {
-            dd(json_decode($response)->data);
+            dd(json_decode($response));
         }
     }
 }

@@ -25,6 +25,7 @@
               </select>
         </div>
         <div class="form-group">
+
             <label for="exampleInputPassword1">Status</label>
             <select class="form-control form-control-lg" name="status" required>
                 {{-- @if ($data->status == 'Active') --}}
@@ -36,6 +37,17 @@
 
               </select>
         </div>
-        <button type="submit" class="btn btn-success">Edit</button>
+        <button type="submit" class="btn btn-success">Create User</button>
+    </form>
+    <H1>Import Instead?</H1>
+    <form method="POST" action="/users/import" enctype="multipart/form-data">
+        @csrf
+        <div class="input-group mb-3">
+            <div class="">
+              <input type="file"  id="" name="file">
+              {{-- <label class="custom-file-label" for="inputGroupFile02">Choose file</label> --}}
+            </div>
+          </div>
+          <button type="submit" class="btn btn-success">Create User</button>
     </form>
 @endsection
